@@ -16,15 +16,15 @@ setup(
       database and store it on disk in a directory structure for local\
       processing.',
       keywords='domestic load research south africa data access',
-      url=,
+      url='https://github.com/wiebket/dlr_data_retrieval',
       author='Wiebke Toussaint',
       author_email='wiebke.toussaint@gmail.com',
       packages=find_packages(),
       license='CC-BY-NC',
-      install_requires=['pandas','numpy','pyodbc','feather','os','glob','plotly'],
+      install_requires=['pandas','numpy','pyodbc','feather','os','glob','plotly', 
+                        'optparse', 'pathlib'],
       include_package_data=True,
-      data_files=[('/data/profiles/raw', []), ('/data/tables', [])]
       entry_points = {
-			'console_scripts': ['dlr-retrieve=src.command_line:main'],
+			'console_scripts': ['retrieve_dlr=src.command_line:main'],
     		}
       )

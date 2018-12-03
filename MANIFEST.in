@@ -1,2 +1,2 @@
-include /src/anonymise/*.csv
+include /src/data/*.csv
 include /src/cnxnstr.txt
