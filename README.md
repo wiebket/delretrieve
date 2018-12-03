@@ -29,7 +29,7 @@ Ensure that python 3 is installed on your computer. A simple way of getting it i
 usr/dlr_data
     |--	observations
     	|-- profiles
-    		|--	raw
+    		|-- raw
     	|-- tables
     		|-- csv
     		|-- feather
