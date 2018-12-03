@@ -1,0 +1,34 @@
+,Question,Datatype,QuestionaireID,ColumnNo,Lower,Upper,anonymise
+27,Tell me a story,blob,1,1,0,1,0
+32,Address,blob,3,1,0,1,1
+200,Where does your hotwater ome from/ other than geyser,blob,3,9,0,50,0
+310,Where does your hotwater ome from/ other than geyser,blob,7,9,0,50,0
+416,PostalAddress,blob,6,1,0,1,1
+417,ResidentialAddress,blob,6,2,0,1,1
+538,Address,blob,7,1,0,1,1
+550,ClinicAddress,blob,1000000,1,0,10,1
+685,appl2_type,blob,1000001,4,0,50,0
+697,AddressOfShop,blob,1000001,1,0,10,1
+698,TelNo,blob,1000001,2,0,10,1
+715,Appl1_type,blob,1000001,3,0,50,0
+716,appl3_type,blob,1000001,5,0,50,0
+717,appl4_type,blob,1000001,6,0,50,0
+718,appl5_type,blob,1000001,7,0,50,0
+719,appl6_type,blob,1000001,8,0,1,0
+720,appl7_type,blob,1000001,9,0,1,0
+721,appl8_type,blob,1000001,10,0,1,0
+722,appl9_type,blob,1000001,11,0,1,0
+723,appl10_type,blob,1000001,12,0,1,0
+724,appl11_type,blob,1000001,13,0,1,0
+777,AddressOfSchool,blob,1000002,1,0,10,1
+798,appl1_type,blob,1000002,2,0,50,0
+799,appl2_type,blob,1000002,3,0,50,0
+800,appl3_type,blob,1000002,4,0,1,0
+801,appl4_type,blob,1000002,5,0,1,0
+802,appl5_type,blob,1000002,6,0,1,0
+803,appl6_type,blob,1000002,7,0,1,0
+804,appl7_type,blob,1000002,8,0,1,0
+805,appl8_type,blob,1000002,9,0,1,0
+806,appl9_type,blob,1000002,10,0,1,0
+807,appl10_type,blob,1000002,11,0,10,0
+808,appl11_type,blob,1000002,12,0,10,0

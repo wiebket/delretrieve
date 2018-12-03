@@ -1,0 +1,4 @@
+Driver={ODBC Driver 11 for SQL Server};
+Server=;
+Database=;
+Trusted_Connection=yes;
