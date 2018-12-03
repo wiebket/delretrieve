@@ -28,11 +28,11 @@ Ensure that python 3 is installed on your computer. A simple way of getting it i
 ```bash
 usr/dlr_data
     |--	observations
-    	|--	profiles
+    	|-- profiles
     		|--	raw
-    	|--	tables
-    		|--	csv
-    		|--	feather
+    	|-- tables
+    		|-- csv
+    		|-- feather
 ```
 3. Update the database connection information in `/src/cnxnstr.txt`. The data retrieval process will ONLY work if you have access permissions to the data. 
 
