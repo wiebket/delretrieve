@@ -8,7 +8,7 @@ Created on Mon Mar 19 14:17:10 2018
 from setuptools import setup, find_packages
 
 setup(
-      name='dlr_data_retrieval',
+      name='dlrretrieval',
       version=0.1,
       description='Fetches data from a DLR MSSQL database',
       long_description='This module helps researchers with limited\
@@ -16,7 +16,7 @@ setup(
       database and store it on disk in a directory structure for local\
       processing.',
       keywords='domestic load research south africa data access',
-      url='https://github.com/wiebket/dlr_data_retrieval',
+      url='https://github.com/wiebket/dlrretrieval',
       author='Wiebke Toussaint',
       author_email='wiebke.toussaint@gmail.com',
       packages=find_packages(),
@@ -25,6 +25,6 @@ setup(
                         'optparse', 'pathlib'],
       include_package_data=True,
       entry_points = {
-			'console_scripts': ['retrieve_dlr=src.command_line:main'],
+			'console_scripts': ['dlr_retrieve=src.command_line:main'],
     		}
       )
