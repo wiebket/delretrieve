@@ -40,7 +40,7 @@ usr/documents/dlr_data
     |-- features
 ```
 
-3. Update the database connection information in `dlrretrieve.cnxnstr.txt`. The data retrieval process will ONLY work if you have access permissions to the data. 
+3. Update the database connection information in [`dlrretrieve.cnxnstr.txt`](dlrretrieve/cnxnstr.txt). The data retrieval process will ONLY work if you have access permissions to the data. 
 
 ## Data retrieval
 
