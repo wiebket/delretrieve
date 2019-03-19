@@ -21,7 +21,7 @@ dlrretrieve
 This package contains tools to retrieve primary data from the South African Domestic Load Research database. It requires access to a MSSQL installation of the DLR database. On site access is available through [Data First's](www.datafirst.uct.ac.za) secure server room at the University of Cape Town (UCT). Researchers on the UCT campus can request remote access to the timeseries data.
 
 ## Setup instructions
-Ensure that python 3 is installed on your computer. A simple way of getting it is to install it with [Anaconda](https://conda.io/docs/user-guide/install/index.html). 
+Ensure that python 3 is installed on your computer. A simple way of getting it is to install it with [Anaconda](https://conda.io/docs/user-guide/install/index.html). Once python has been installed, you are ready for installing the dlrretrieve package.
 
 1. Clone this repository from github.
 2. Navigate to the root directory (`dlrretrieve`) and run the `setup.py` script. This will setup the necessary requirements and create the following directory structure for saving retrieved data:
