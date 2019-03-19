@@ -5,10 +5,11 @@ dlrretrieve
     |-- dlrretrieve
     	|-- data
     	    |-- blobAnon.csv
-    	    |-- charAnon.csv		
+    	    |-- charAnon.csv
+	|-- __init__.py
+    	|-- cnxnstr.txt	
     	|-- command_line.py
     	|-- retrieve_dlr.py
-    	|-- cnxnstr.txt
     	|-- support.py
     |-- setup.py
     |-- README.md
