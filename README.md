@@ -1,8 +1,8 @@
 # South African Domestic Load Research Data Retrieval
 
 ```bash
-dlr_data_retrieval
-    |-- src
+dlrretrieve
+    |-- dlrretrieve
     	|-- data
     	    |-- blobAnon.csv
     	    |-- charAnon.csv		
