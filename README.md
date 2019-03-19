@@ -4,8 +4,8 @@
 dlr_data_retrieval
     |-- src
     	|-- data
-    		|-- blobAnon.csv
-    		|-- charAnon.csv		
+    	    |-- blobAnon.csv
+    	    |-- charAnon.csv		
     	|-- command_line.py
     	|-- retrieve_dlr.py
     	|-- cnxnstr.txt
@@ -24,22 +24,22 @@ This package contains tools to retrieve primary data from the South African Dome
 Ensure that python 3 is installed on your computer. A simple way of getting it is to install it with [Anaconda](https://conda.io/docs/user-guide/install/index.html). 
 
 1. Clone this repository from github.
-2. Navigate to the root directory (`dlr_data_retrieval`) and run the `setup.py` script. This will setup the necessary requirements and create the following directory structure for saving retrieved data:
+2. Navigate to the root directory (`dlrretrieve`) and run the `setup.py` script. This will setup the necessary requirements and create the following directory structure for saving retrieved data:
 
 ```bash
 usr/documents/dlr_data
-	|-- observations
-		|-- profiles
-			|-- raw
-				|-- GroupYear
-					|-- ObsYear-ObsMonth
+    |-- observations
+	|-- profiles
+	    |-- raw
+		|-- GroupYear
+		    |-- ObsYear-ObsMonth
 		|-- tables
-			|-- csv
-			|-- feather
-	|-- features
+		    |-- csv
+		    |-- feather
+    |-- features
 ```
 
-3. Update the database connection information in `/src/cnxnstr.txt`. The data retrieval process will ONLY work if you have access permissions to the data. 
+3. Update the database connection information in `dlrretrieve.cnxnstr.txt`. The data retrieval process will ONLY work if you have access permissions to the data. 
 
 ## Data retrieval
 
