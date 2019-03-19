@@ -1,4 +1,4 @@
 Driver={ODBC Driver 11 for SQL Server};
-Server=;
-Database=;
+Server=servername/MSSQL2014;
+Database=databasename;
 Trusted_Connection=yes;
