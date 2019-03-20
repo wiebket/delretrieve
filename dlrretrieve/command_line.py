@@ -7,7 +7,8 @@ Created on 29 November 2018
 """
 
 from optparse import OptionParser
-from retrieve_dlr import saveTables, saveAnswers, saveRawProfiles
+from .retrieve_dlr import saveTables, saveAnswers, saveRawProfiles
+from .support import validYears
 
 def main():
     parser = OptionParser()
@@ -22,7 +23,7 @@ def main():
                       help='Start year for profile data retrieval')
     parser.add_option('-z', '--endyear', dest='endyear', type=int, 
                       help='End year for profile data retrieval')
-    parser.add_option('-csv', '--csv', action='store_true', dest='csv', 
+    parser.add_option('-c', '--csv', action='store_true', dest='csv', 
                       help='Save profiles as .csv files.')
     
     parser.set_defaults(tables=False, answers=False, profiles=False, csv=False)
@@ -45,7 +46,9 @@ def main():
             options.startyear = int(input('Enter observation start year: '))
         if options.endyear is None:
             options.endyear = int(input('Enter observation end year: '))
+            
+        validYears(options.startyear, options.endyear)   #check that year input is valid     
         saveRawProfiles(options.startyear, options.endyear, filetype)
-        
+   
     return print('>>>Data retrieve complete.<<<')
     

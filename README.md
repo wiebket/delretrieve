@@ -25,35 +25,35 @@ This package contains tools to retrieve primary data from the South African Dome
 Ensure that python 3 is installed on your computer. A simple way of getting it is to install it with [Anaconda](https://conda.io/docs/user-guide/install/index.html). Once python has been installed, you are ready for installing the dlrretrieve package.
 
 1. Clone this repository from github.
-2. Navigate to the root directory (`dlrretrieve`) and run the `setup.py` script. This will setup the necessary requirements and create the following directory structure for saving retrieved data:
+2. Navigate to the root directory (`dlrretrieve`) and run `setup.py install`. This will setup the necessary requirements and create the following directory structure for saving retrieved data:
 
 ```bash
 usr/documents/dlr_data
     |-- observations
-	|-- profiles
-	    |-- raw
-		|-- GroupYear
-		    |-- ObsYear-ObsMonth
-		|-- tables
-		    |-- csv
-		    |-- feather
+        |-- profiles
+            |-- raw
+                |-- GroupYear
+                    |-- ObsYear-ObsMonth
+        |-- tables
+            |-- csv
+            |-- feather
     |-- features
 ```
 
-3. Update the database connection information in [`dlrretrieve.cnxnstr.txt`](dlrretrieve/cnxnstr.txt). The data retrieval process will ONLY work if you have access permissions to the data. 
+3. Update the database connection information in `USER.dlr_data.usr.cnxnstr.txt`. The data retrieval process will ONLY work if you have access permissions to the data. 
 
 ## Data retrieval
 
-From the command line run 
+From the command line (or Anaconda Prompt on windows) run 
 
-1. `python retrieve_dlr -p` to retrieve 5min load profile timeseries data
+1. `python dlrretrieve_data -p` to retrieve 5min load profile timeseries data
 	You will be prompted to enter the start and end year (choose in the range of 1994 - 2014) for which you want to retrieve data
-2. `python retrieve_dlr -t` to retrieve all supplementary tables
-3. `python retrieve_dlr -s` to retrieve anonymised survey responses
+2. `python dlrretrieve_data -t` to retrieve all supplementary tables
+3. `python dlrretrieve_data -s` to retrieve anonymised survey responses
 
 ### Additional command-line options
 
-`-csv`: (optional) saves files as .csv files instead of .feather (see notes on file format below)  
+`-c`: (optional) saves files as .csv files instead of .feather (see notes on file format below)  
 `-y`: (optional) start year for profile data retrieval  
 `-z`: (optional) end year for profile data retrieval  
 

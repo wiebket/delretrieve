@@ -15,7 +15,7 @@ import pyodbc
 import feather
 import os
 
-from support import rawprofiles_dir, table_dir, obs_dir, validYears
+from .support import usr_dir, rawprofiles_dir, table_dir, obs_dir, validYears
 
 
 def getObs(querystring = 'SELECT * FROM tablename', tablename = None, chunksize = 10000):
@@ -31,7 +31,7 @@ def getObs(querystring = 'SELECT * FROM tablename', tablename = None, chunksize 
     else:
         #create connection object:
         try:
-            with open('cnxnstr.txt', 'r') as f: 
+            with open(os.path.join(usr_dir, 'cnxnstr.txt'), 'r') as f: 
                 cnxnstr = f.read().replace('\n', '')
         except FileNotFoundError as err:
             print("Cannot find file with connection information for the database: {0}".format(err))
