@@ -4,6 +4,8 @@
 @author: Wiebke Toussaint
 
 Support functions for the dlrretrieve module
+
+Updated: 21 March 2019
 """
 
 import os
@@ -15,79 +17,74 @@ home_dir = Path.home()
 usr_dir = os.path.join(home_dir, 'dlr_data','usr')
 os.makedirs(usr_dir, exist_ok=True)
 
-temp_table_dir = os.path.join(home_dir,'dlr_data', 'observations', 'tables') #default tables directory
-temp_profiles_dir = os.path.join(home_dir,'dlr_data', 'observations', 'profiles') #default profiles directory
-    
-def specifyDataDir():
-    """      
+def getDataDir():
     """
+    This function checks if a valid data directory has been specified.
+    """
+    filepath = []
+    #read directory paths from store_path.txt file
+    with open(os.path.join(usr_dir,'store_path.txt')) as f:
+        for line in f:
+            try:
+                filepath.append(line.strip())
+            except:
+                pass
+    mydir = filepath[0]
+    validdir = os.path.isdir(mydir)
+    #check if directory paths exist (does not validate directory structure)
+    if validdir is False:
+        #print('Your stored {} data path is invalid.'.format(k))
+        raise 
+    else:
+        print('Your data path is \n{}'.format(mydir))
     
-    dirs = {'profiles':temp_profiles_dir, 'tables':temp_table_dir}
+    return mydir
 
-    for k, v in dirs.items():
-        #check if dlr_data/.../profiles/ and dlr_data/.../tables/ exists in default locations
-
-        try:
-            filepaths = {}
-            #read directory paths from store_path.txt file
-            with open(os.path.join(usr_dir,'store_path.txt')) as f:
-                for line in f:
-                    try:
-                        i, j = line.split(',')
-                        filepaths[i] = j.strip()
-                    except:
-                        pass
-
-            mydir = filepaths[k]
+def specifyDataDir():
+    """  
+    This function creates the directory structure for saving data.    
+    """
+    temp_obs_dir = os.path.join(home_dir,'dlr_data', 'observations') #default directory for observational data
+    
+    try:
+        mydir = getDataDir()
+    
+    except:
+        print('Data path not set or invalid directory.')       
+        while True:
+            mydir = input('The default path for storing data is \n{}\nHit enter to keep the default or paste a new path to change it.\n'.format(temp_obs_dir))
             validdir = os.path.isdir(mydir)
-            #check if directory paths exist (does not validate directory structure)
-            if validdir is False:
-                #print('Your stored {} data path is invalid.'.format(k))
-                raise 
-            else:
-                print('Your {} data path is {}.'.format(k, mydir))
-        
-        except:
-            print('The default path for storing {} data is \n{}'.format(k, v))
             
-            while True:
-                mydir = input('Hit enter to keep the default or paste a new {} path to change.\n'.format(k))
-                validdir = os.path.isdir(mydir)
-                
-                if validdir is False:
-                    if len(mydir) == 0:
-                        mydir = v
-                        validdir = True
-                    else:
-                        print('This is not a directory. Try again.')
-                        continue
-                if validdir is True:
-                    break
-        dirs[k] = mydir
+            if validdir is False:
+                print('\nThe directory does not exit. Creating it now ...')
+                if len(mydir) == 0:
+                    mydir = temp_obs_dir
+                os.makedirs(mydir, exist_ok=True)
+                    
+            print('The data path has been set to \n{}\n'.format(mydir))
+            break
         
-    #write rawprofiles dir to file   
-    f = open(os.path.join(usr_dir,'store_path.txt'),'w')
-    for i in dirs.items():
-        f.write(', '.join(i)+'\n')
-    f.close()
+        #write data dir to file   
+        f = open(os.path.join(usr_dir,'store_path.txt'),'w')
+        f.write(mydir)
+        f.close()
+        
+    print('You can change it in your_home_directory/dlr_data/usr/store_path.txt')
     
-    print('\nYou can change your data paths in /your_home_directory/dlr_data/usr/store_path.txt')
+    profiles_dir = os.path.join(mydir, 'profiles')
+    table_dir = os.path.join(mydir, 'tables')
+    rawprofiles_dir = os.path.join(profiles_dir, 'raw')
     
-    return dirs['profiles'], dirs['tables']
+    return mydir, profiles_dir, table_dir, rawprofiles_dir
 
-#Data structure
-usr_data = specifyDataDir()
-profiles_dir = usr_data[0]
-table_dir = usr_data[1]
-rawprofiles_dir = os.path.join(profiles_dir, 'raw')
-obs_dir = os.path.dirname(profiles_dir)
-data_dir = os.path.dirname(obs_dir)
-fdata_dir = os.path.join(os.path.dirname(usr_dir), 'survey_features')
-pdata_dir = os.path.join(os.path.dirname(usr_dir), 'resampled_profiles')    
-
-for d in [table_dir, rawprofiles_dir]:
-    os.makedirs(d, exist_ok=True)
-
+def createDataDirs(table_dir, rawprofiles_dir):
+        
+    print('Creating subdirectories...')
+    for d in [table_dir, rawprofiles_dir]:
+        os.makedirs(d, exist_ok=True)
+    
+    return
+    
 class InputError(ValueError):
     """Exception raised for errors in the input.
 

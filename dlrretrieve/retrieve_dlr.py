@@ -15,10 +15,10 @@ import pyodbc
 import feather
 import os
 
-from .support import usr_dir, rawprofiles_dir, table_dir, obs_dir, validYears
+from .support import usr_dir, specifyDataDir, validYears
 
 
-def getObs(querystring = 'SELECT * FROM tablename', tablename = None, chunksize = 10000):
+def getObs(tablename = None, querystring = 'SELECT * FROM tablename', chunksize = 10000):
     """
     Fetches a table from the DLR database and returns it as a pandas dataframe. 
     Requires /src/cnxnstr.txt with database connection parameters.
@@ -58,7 +58,7 @@ def getGroups():
     
     groups = getObs('Groups')
     groups['ParentID'].fillna(0, inplace=True)
-    groups['ParentID'] = groups['ParentID'].astype('int64').astype('category')
+    groups['ParentID'] = groups['ParentID'].astype('int64')
     groups['GroupName'] = groups['GroupName'].map(lambda x: x.strip())
     #TRY THIS groups['GroupName'] = groups['GroupName'].str.strip()
     
@@ -113,7 +113,8 @@ def getProfileID(year = None):
     else:
         validYears(year) #check if year is valid
         allgroups = getGroups()
-        groupids = allgroups[allgroups.Year.astype(int) == year, 'GroupID'] 
+        allgroups.Year = allgroups.Year.astype(int)
+        groupids = allgroups.loc[allgroups.Year == year, 'GroupID'] 
         profileid = pd.Series(allprofiles.loc[allprofiles.GroupID.isin(groupids),
                                               'ProfileID'].unique())
     return profileid
@@ -190,6 +191,7 @@ def writeProfilePath(group_year, year, month, units, filetype):
     """
     This function creates the directory hierarchy and file names for writing raw profiles.
     """
+    obs_dir, profiles_dir, table_dir, rawprofiles_dir = specifyDataDir()
     
     dir_path = os.path.join(rawprofiles_dir, str(group_year), str(year)+'-'+str(month))
     try:
@@ -249,7 +251,7 @@ def writeProfiles(group_year, month, units, filetype):
         except Exception as e:
             print(e)
             pass    
-    #write logs
+    #TO DO write logs
     return
 
 
@@ -260,6 +262,8 @@ def writeTables(names, dataframes):
     
     """
     #create data directories
+    obs_dir, profiles_dir, table_dir, rawprofiles_dir = specifyDataDir()
+    
     os.makedirs(os.path.join(table_dir, 'feather') , exist_ok=True)
     os.makedirs(os.path.join(table_dir, 'csv') , exist_ok=True)
 
@@ -305,7 +309,8 @@ def saveTables():
     tabledata = [groups, questions, questionaires, qdtype, qredundancy, qconstraints, answers, links, profiles, profilesummary, recorderinstall]
     
     writeTables(tablenames, tabledata)
-    return
+    
+    return print('Save database tables complete.\n')
  
 def saveAnswers():
     """
@@ -321,14 +326,15 @@ def saveAnswers():
         if v is None:
             pass
         else:
-            qs = pd.read_csv(os.path.join(obs_dir, 'data', v))
+            qs = pd.read_csv(os.path.join(usr_dir, v))
             qs = qs.loc[lambda qs: qs.anonymise == 1, :]
             qanon = pd.merge(getObs('Answers'), qs, left_on='QuestionaireID', right_on='QuestionaireID')[['AnswerID','ColumnNo','anonymise']]
             for i, rows in qanon.iterrows():
                 a.set_value(a[a.AnswerID == rows.AnswerID].index[0], str(rows.ColumnNo),'a')
         
         writeTables([k.lower() + '_anonymised'],[a]) #saves answers as feather object
-    return
+    
+    return print('Save anonymised survey responses complete.\n')
     
 
 def saveRawProfiles(yearstart, yearend, filetype='feather'):
@@ -347,4 +353,4 @@ def saveRawProfiles(yearstart, yearend, filetype='feather'):
             for unit in ['A', 'V', 'kVA', 'Hz', 'kW']:
                 for month in range(1, 13):
                     writeProfiles(year, month, unit, filetype)
-    return
+    return print('Save profiles complete.')
