@@ -15,8 +15,9 @@ import pyodbc
 import feather
 import os
 
-from .support import usr_dir, specifyDataDir, validYears
+from .support import usr_dir, specifyDataDir, validYears, writeLog, InputError
 
+obs_dir, profiles_dir, table_dir, rawprofiles_dir = specifyDataDir()
 
 def getObs(tablename = None, querystring = 'SELECT * FROM tablename', chunksize = 10000):
     """
@@ -161,6 +162,8 @@ def getProfiles(group_year, month, units):
         [A, V, kVA, Hz, kW] for 2009 - 2014
     """
     
+    print('G'+str(group_year), month, units)
+    
     # Get metadata
     mp, plist = getMetaProfiles(group_year, units)
     
@@ -181,25 +184,29 @@ def getProfiles(group_year, month, units):
     #convert strings to category data type to reduce memory usage
     df.loc[:,['ProfileID','Valid']] = df.loc[:,['ProfileID','Valid']].apply(pd.Categorical)
     
-    head_year = df.head(1).Datefield.dt.year[0]
-    tail_year = df.tail(1).Datefield.dt.year[len(df)-1]
+#    try:
+#        head_year = df.head(1).Datefield.dt.year[0]
+#        tail_year = df.tail(1).Datefield.dt.year[len(df)-1]
+#    except:
+#        expr = '-'.join([str(group_year),str(month)])
+#        raise InputError(expr, 'no data collected.')
     
-    return df, head_year, tail_year
+    return df#, head_year, tail_year
     
 
 def writeProfilePath(group_year, year, month, units, filetype):
     """
     This function creates the directory hierarchy and file names for writing raw profiles.
     """
-    obs_dir, profiles_dir, table_dir, rawprofiles_dir = specifyDataDir()
     
-    dir_path = os.path.join(rawprofiles_dir, str(group_year), str(year)+'-'+str(month))
+    dir_path = os.path.join(rawprofiles_dir, str(units), str(year))
     try:
         os.makedirs(dir_path , exist_ok=True) #create profile directory if it does not exist
     except Exception as e:
         return e
-    file_path = os.path.join(dir_path, str(year)+'-'+str(month)+'_'+str(units)+'.'+filetype)
     
+    file_path = os.path.join(dir_path, str(year)+'-'+str(month)+'_G'+str(group_year)+'_'+str(units)+'.'+filetype)
+      
     return file_path
 
 
@@ -207,51 +214,67 @@ def writeProfiles(group_year, month, units, filetype):
     """
     This function saves profiles to disk.
     """
+           
+#    df, head_year, tail_year = getProfiles(group_year, month, units)
+#    head_path = writeProfilePath(group_year, head_year, month, units, filetype)
+#    tail_path = writeProfilePath(group_year, tail_year, month, units, filetype)
     
-    df, head_year, tail_year = getProfiles(group_year, month, units)
-    head_path = writeProfilePath(group_year, head_year, month, units, filetype)
-    tail_path = writeProfilePath(group_year, tail_year, month, units, filetype)
-    
-    #check if dataframe contains profiles for two years
-    if head_year == tail_year: 
-        print(head_path)
-        try:
-            if filetype=='feather':
-                feather.write_dataframe(df, head_path)
-            elif filetype=='csv':
-                df.to_csv(head_path)
-            print('Write success')
-        except Exception as e:
-            print(e)
-            pass
-    
-    #split dataframe into two years and save separately            
-    else:
-        head_df = df[df.Datefield.dt.year == head_year].reset_index(drop=True)
-        print(head_path)
-        try:
-            if filetype=='feather':
-                feather.write_dataframe(head_df, head_path)
-            elif filetype=='csv':
-                df.to_csv(head_path)
-            print('Write success')
-        except Exception as e:
-            print(e)
-            pass
+    df = getProfiles(group_year, month, units)
+    try:
+        yrs = df.Datefield.dt.year.unique()
+    except:
+        expr = '-'.join(['G'+str(group_year), str(month)])
+        raise InputError(expr, 'no data collected.')
         
-        #create directory for second year
-        tail_df = df[df.Datefield.dt.year == tail_year].reset_index(drop=True)
-        print(tail_path)
+    for y in yrs:
+        path = writeProfilePath(group_year, y, month, units, filetype)
+        filtered_df = df[df.Datefield.dt.year == y].reset_index(drop=True)
+        
         try:
             if filetype=='feather':
-                feather.write_dataframe(tail_df, tail_path)
+                feather.write_dataframe(filtered_df, path)
             elif filetype=='csv':
-                df.to_csv(tail_path)
-            print('Write success')
+                filtered_df.to_csv(path)
+            print(y, ': Write success')
         except Exception as e:
-            print(e)
-            pass    
-    #TO DO write logs
+            print(y, ': Write FAIL')
+            return e
+        
+#    #check if dataframe contains profiles in same calendar month for two years
+#    if head_year == tail_year: 
+#        try:
+#            if filetype=='feather':
+#                feather.write_dataframe(df, head_path)
+#            elif filetype=='csv':
+#                df.to_csv(head_path)
+#            print('Write success')
+#        except Exception as e:
+#            return e
+#    
+#    #split dataframe into two years and save separately            
+#    else:
+#        head_df = df[df.Datefield.dt.year == head_year].reset_index(drop=True)
+#        try:
+#            if filetype=='feather':
+#                feather.write_dataframe(head_df, head_path) 
+#            elif filetype=='csv':
+#                df.to_csv(head_path)
+#            print('Write success')
+#        except Exception as e: 
+#            return e
+#        
+#        #create directory for second year
+#        tail_df = df[df.Datefield.dt.year == tail_year].reset_index(drop=True)
+#        print('G'+str(group_year), units, tail_year, month)
+#        try:
+#            if filetype=='feather':
+#                feather.write_dataframe(tail_df, tail_path)
+#            elif filetype=='csv':
+#                df.to_csv(tail_path)
+#            print('Write success')
+#        except Exception as e: #log exception
+#            return e
+        
     return
 
 
@@ -262,7 +285,6 @@ def writeTables(names, dataframes):
     
     """
     #create data directories
-    obs_dir, profiles_dir, table_dir, rawprofiles_dir = specifyDataDir()
     
     os.makedirs(os.path.join(table_dir, 'feather') , exist_ok=True)
     os.makedirs(os.path.join(table_dir, 'csv') , exist_ok=True)
@@ -340,17 +362,31 @@ def saveAnswers():
 def saveRawProfiles(yearstart, yearend, filetype='feather'):
     """
     This function iterates through all profiles and saves them in a ordered directory structure by 
-    year and unit.
+    unit and year. 
     """
     
     if yearstart < 2009:
         for year in range(yearstart, yearend + 1):
             for unit in ['A','V']:
                 for month in range(1, 13):
-                    writeProfiles(year, month, unit, filetype)
+                    try:
+                        writeProfiles(year, month, unit, filetype)
+                    except Exception as e:
+                        print(e)
+                        logline = ['G'+str(year), unit, month, e]
+                        log_lines = pd.DataFrame([logline], columns = ['group_year', 'unit', 'month', 'error'])
+                        writeLog(log_lines,'log_dlrretrieve_profiles')
+    
     elif yearstart >= 2009 and yearend <= 2014:       
         for year in range(yearstart, yearend + 1):
             for unit in ['A', 'V', 'kVA', 'Hz', 'kW']:
                 for month in range(1, 13):
-                    writeProfiles(year, month, unit, filetype)
+                    try:
+                        writeProfiles(year, month, unit, filetype)
+                    except Exception as e:
+                        print(e)
+                        logline = ['G'+str(year), unit, month, e]
+                        log_lines = pd.DataFrame([logline], columns = ['group_year', 'unit', 'month', 'error'])
+                        writeLog(log_lines,'log_dlrretrieve_profiles')
+    
     return print('Save profiles complete.')
