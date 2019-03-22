@@ -3,7 +3,7 @@
 """
 @author: Wiebke Toussaint
 
-Support functions for the dlrretrieve module
+Support functions for the dlrretrieve module,
 
 Updated: 21 March 2019
 """
@@ -19,8 +19,10 @@ os.makedirs(usr_dir, exist_ok=True)
 
 def getDataDir():
     """
-    This function checks if a valid data directory has been specified.
+    This function checks if a valid data directory has been specified in
+    USER_HOME/dlr_data/usr/store_path.txt.
     """
+    
     filepath = []
     #read directory paths from store_path.txt file
     with open(os.path.join(usr_dir,'store_path.txt')) as f:
@@ -40,10 +42,12 @@ def getDataDir():
     
     return mydir
 
+
 def specifyDataDir():
     """  
     This function creates the directory structure for saving data.    
     """
+    
     temp_obs_dir = os.path.join(home_dir,'dlr_data', 'observations') #default directory for observational data
     
     try:
@@ -52,7 +56,7 @@ def specifyDataDir():
     except:
         print('Data path not set or invalid directory.')       
         while True:
-            mydir = input('The default path for storing data is \n{}\nHit enter to keep the default or paste a new path to change it.\n'.format(temp_obs_dir))
+            mydir = input('The default path for storing data is \n{}\n Hit enter to keep the default or paste a new path to change it.\n'.format(temp_obs_dir))
             validdir = os.path.isdir(mydir)
             
             if validdir is False:
@@ -69,7 +73,7 @@ def specifyDataDir():
         f.write(mydir)
         f.close()
         
-    print('You can change it in your_home_directory/dlr_data/usr/store_path.txt')
+    print('You can change it in USER_HOME/dlr_data/usr/store_path.txt')
     
     profiles_dir = os.path.join(mydir, 'profiles')
     table_dir = os.path.join(mydir, 'tables')
@@ -77,16 +81,10 @@ def specifyDataDir():
     
     return mydir, profiles_dir, table_dir, rawprofiles_dir
 
-def createDataDirs(table_dir, rawprofiles_dir):
-        
-    print('Creating subdirectories...')
-    for d in [table_dir, rawprofiles_dir]:
-        os.makedirs(d, exist_ok=True)
-    
-    return
     
 class InputError(ValueError):
-    """Exception raised for errors in the input.
+    """
+    Exception raised for errors in the input.
 
     Attributes:
         expression -- input expression in which the error occurred
@@ -100,7 +98,13 @@ class InputError(ValueError):
        
 def validYears(*args):
     """
-    Checks if year range is valid. Valid years are between 1994 and 2014.
+    This function checks if study was conducted during years specfied. 
+    
+    *input*
+    -------
+    *args (int)
+    
+    Valid arguments are years between 1994 and 2014.
     """
     
     for year in args:
@@ -112,7 +116,13 @@ def validYears(*args):
 
 def writeLog(log_line, file_name):    
     """
-    Adds timestamp column to dataframe, then write dataframe to csv log file. 
+    This function adds a timestamp to a log line and writes it to a log file. 
+    
+    *input*
+    -------
+    log_line (dataframe)
+    file_name (str): directory appended to USER_HOME/dlr_data/usr/ in which 
+    logs will be saved.
     """
     
     #Create log_dir and file to log path

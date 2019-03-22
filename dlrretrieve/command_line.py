@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on 29 November 2018
-
 @author: Wiebke Toussaint
+
+Comman line interface for dlrretrieve module.
+
+Updated: 22 March 2019
 """
 
 from optparse import OptionParser
