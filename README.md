@@ -10,7 +10,7 @@ There are easier options than setting up your own server instance of the databas
 2. Several datasets with aggregated views are available [online]() and can be accessed for academic purposes.  
 
 Other useful packages are:
-[dlr_data_processing](https://github.com/wiebket/dlrprocess) for data processing
+[dlr_data_processing](https://github.com/wiebket/dlrprocess) for cleaning, wrangling, processing, aggregating and feature engineering of the DLR data.
 
 ### Package structure
 
