@@ -16,18 +16,18 @@ Other useful packages are:
 
 ```bash
 dlrretrieve
-    |-- dlrretrieve
-    	|-- data
-    	    |-- blobAnon.csv
-    	    |-- charAnon.csv
+	|-- dlrretrieve
+		|-- data
+    		|-- blobAnon.csv
+    		|-- charAnon.csv
     		|-- cnxnstr.txt	
 			|-- store_path.txt
 		|-- __init__.py
-    	|-- command_line.py
-    	|-- retrieve_dlr.py	
-    	|-- support.py
+		|-- command_line.py
+		|-- retrieve_dlr.py	
+		|-- support.py
 	|-- __init__.py
-    |-- MANIFEST.in
+	|-- MANIFEST.in
 	|-- README.md
 	|-- setup.py
 ```
