@@ -413,8 +413,8 @@ def saveRawProfiles(yearstart, yearend, filetype='feather'):
     filetype (str): 'csv', 'feather'
     """
     
-    if yearstart < 2009:
-        for year in range(yearstart, yearend + 1):
+    for year in range(yearstart, yearend + 1):
+        if year < 2009:
             for unit in ['A','V']:
                 for month in range(1, 13):
                     try:
@@ -425,8 +425,7 @@ def saveRawProfiles(yearstart, yearend, filetype='feather'):
                         log_lines = pd.DataFrame([logline], columns = ['group_year', 'unit', 'month', 'error'])
                         writeLog(log_lines,'log_dlrretrieve_profiles')
     
-    elif yearstart >= 2009 and yearend <= 2014:       
-        for year in range(yearstart, yearend + 1):
+        elif year >= 2009:
             for unit in ['A', 'V', 'kVA', 'Hz', 'kW']:
                 for month in range(1, 13):
                     try:
