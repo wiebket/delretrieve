@@ -276,7 +276,7 @@ def writeProfiles(group_year, month, unit, filetype):
             print(y, ': Write success')
         except Exception as e:
             print(y, ': Write FAIL')
-            return e
+            raise e
                 
     return
 
