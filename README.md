@@ -43,10 +43,10 @@ Ensure that python 3 is installed on your computer. A simple way of getting it i
 
 From the command line (or Anaconda Prompt on windows) run 
 
-1. `python dlrretrieve_data -p` to retrieve 5min load profile timeseries data
+1. `dlrretrieve_data -p` to retrieve 5min load profile timeseries data
 	You will be prompted to enter the start and end year (choose in the range of 1994 - 2014) for which you want to retrieve data
-2. `python dlrretrieve_data -t` to retrieve all supplementary tables
-3. `python dlrretrieve_data -s` to retrieve anonymised survey responses
+2. `dlrretrieve_data -t` to retrieve all supplementary tables
+3. `dlrretrieve_data -s` to retrieve anonymised survey responses
 
 When you use the command line interface for the first time, you will be requested to confirm the path for storing retrieved data. The 5 minute load profile data is ~120GB. Ensure that you choose a location with sufficient storage space! The default location is`USER_HOME/dlr_data/observations/`. You can change the storage location by creating a new target directory and altering the path in `USER_HOME/dlr_data/usr/store_path.txt`, or by deleting the path and entering a new path when prompted by the command line.
 
