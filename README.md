@@ -18,9 +18,9 @@ Other useful packages are:
 dlrretrieve
 	|-- dlrretrieve
 		|-- data
-    		|-- blobAnon.csv
-    		|-- charAnon.csv
-    		|-- cnxnstr.txt	
+    			|-- blobAnon.csv
+    			|-- charAnon.csv
+    			|-- cnxnstr.txt	
 			|-- store_path.txt
 		|-- __init__.py
 		|-- command_line.py
