@@ -7,7 +7,10 @@ Created on Mon Mar 19 14:17:10 2018
 """
 from setuptools import setup, find_packages
 import os
-from dlrretrieve.support import usr_dir
+from pathlib import Path
+
+usr_dir = os.path.join(Path.home(), 'dlr_data','usr')
+os.makedirs(usr_dir, exist_ok=True)
 
 setup(
       name='dlrretrieve',

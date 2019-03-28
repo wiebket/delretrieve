@@ -272,7 +272,7 @@ def writeProfiles(group_year, month, unit, filetype):
             if filetype=='feather':
                 feather.write_dataframe(filtered_df, path)
             elif filetype=='csv':
-                filtered_df.to_csv(path)
+                filtered_df.to_csv(path, index=False)
             print(y, ': Write success')
         except Exception as e:
             print(y, ': Write FAIL')

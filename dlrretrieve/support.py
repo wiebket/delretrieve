@@ -15,7 +15,6 @@ import datetime as dt
 #Data structure
 home_dir = Path.home()
 usr_dir = os.path.join(home_dir, 'dlr_data','usr')
-os.makedirs(usr_dir, exist_ok=True)
 
 def getDataDir():
     """
