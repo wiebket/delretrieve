@@ -77,9 +77,9 @@ def getGroups():
     groups_level_1 = groups[groups['ParentID']==0] 
     #LEVEL 2 GROUPS: Eskom LR, NRS LR, Namibia, Clinics, Shops, Schools
     groups_level_2 = groups[groups['ParentID'].isin(groups_level_1['GroupID'])]
-    #LEVLE 3 GROUPS: Years
+    #LEVEL 3 GROUPS: Years
     groups_level_3 = groups[groups['ParentID'].isin(groups_level_2['GroupID'])]
-    #LEVLE 4 GROUPS: Locations
+    #LEVEL 4 GROUPS: Locations
     groups_level_4 = groups[groups['ParentID'].isin(groups_level_3['GroupID'])]
     
     #Slim down the group levels to only include columns requried for merging
