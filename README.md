@@ -10,7 +10,7 @@ There are easier options than setting up your own server instance of the databas
 2. Several datasets with aggregated views are available [online]() and can be accessed for academic purposes.  
 
 Other useful packages are:
-[del_data_processing](https://github.com/wiebket/delprocess) for cleaning, wrangling, processing, aggregating and feature engineering of the DEL data.
+[delprocess](https://github.com/wiebket/delprocess) for cleaning, wrangling, processing, aggregating and feature engineering of the DEL data.
 
 ### Package structure
 
