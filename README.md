@@ -1,8 +1,8 @@
-# South African Domestic Load Research Data Retrieval
+# South African Domestic Electrical Load Data Retrieval
 
 ## About this package
 
-This package contains tools to retrieve primary data from the South African Domestic Load Research database. It requires access to a MSSQL server installation of the DLR database. 
+This package contains tools to retrieve primary data from the South African Domestic Electrical Load (DEL) database. It requires access to a MSSQL server installation of the General_LR4 database. 
 
 **Note on data access:** 
 There are easier options than setting up your own server instance of the database.  
@@ -10,13 +10,13 @@ There are easier options than setting up your own server instance of the databas
 2. Several datasets with aggregated views are available [online]() and can be accessed for academic purposes.  
 
 Other useful packages are:
-[dlr_data_processing](https://github.com/wiebket/dlrprocess) for cleaning, wrangling, processing, aggregating and feature engineering of the DLR data.
+[del_data_processing](https://github.com/wiebket/delprocess) for cleaning, wrangling, processing, aggregating and feature engineering of the DEL data.
 
 ### Package structure
 
 ```bash
-dlrretrieve
-	|-- dlrretrieve
+delretrieve
+	|-- delretrieve
 		|-- data
     			|-- blobAnon.csv
     			|-- charAnon.csv
@@ -33,10 +33,10 @@ dlrretrieve
 ```
 
 ## Setup instructions
-Ensure that python 3 is installed on your computer. A simple way of getting it is to install it with [Anaconda](https://conda.io/docs/user-guide/install/index.html). Once python has been installed, the dlrretrieve package can be installed.
+Ensure that python 3 is installed on your computer. A simple way of getting it is to install it with [Anaconda](https://conda.io/docs/user-guide/install/index.html). Once python has been installed, the delretrieve package can be installed.
 
 1. Clone this repository from github.
-2. Navigate to the root directory (`dlrretrieve`) and run `python setup.py install`. 
+2. Navigate to the root directory (`delretrieve`) and run `python setup.py install`. 
 3. Update the database connection information in `USER_HOME/dlr_data/usr/cnxnstr.txt`. The data retrieval process will ONLY work if you have installed the database on a MSSQL server instance and have access permissions to the data. 
 
 ## Data retrieval
