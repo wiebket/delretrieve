@@ -18,19 +18,20 @@ Other useful packages are:
 
 ```bash
 delretrieve
-	|-- delretrieve
-		|-- data
-    			|-- blobAnon.csv
-    			|-- charAnon.csv
-    			|-- cnxnstr.txt	
-			|-- store_path.txt
-		|-- __init__.py
-		|-- command_line.py
-		|-- retrieve_del.py	
-		|-- support.py
-	|-- MANIFEST.in
-	|-- README.md
-	|-- setup.py
+    |-- delretrieve
+        |-- data
+            |-- blobAnon.csv
+            |-- charAnon.csv
+            |-- cnxnstr.txt	
+            |-- store_path.txt
+            |-- DEL_logo.png
+        |-- __init__.py
+        |-- command_line.py
+        |-- retrieve_del.py	
+        |-- support.py
+    |-- MANIFEST.in
+    |-- README.md
+    |-- setup.py
 ```
 
 ## Setup instructions
