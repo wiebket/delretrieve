@@ -1,2 +1,2 @@
-include /src/data/*.csv
-include /src/cnxnstr.txt
+include delretrieve/data/*.csv
+include delretrieve/data/cnxnstr.txt

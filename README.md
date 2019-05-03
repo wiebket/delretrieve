@@ -1,10 +1,12 @@
-# South African Domestic Electrical Load Data Retrieval
+<img src="/delretrieve/data/DEL_logo.png" alt="DEL Logo" width="314" height="136.4" align="left" vspace="80" hspace="20" />
+
+# South African <br/> Domestic Electrical Load <br/> Data Retrieval
 
 ## About this package
 
 This package contains tools to retrieve primary data from the South African Domestic Electrical Load (DEL) database. It requires access to a MSSQL server installation of the original General_LR4 database produced during the NRS Load Research study. 
 
-**Note on data access:** 
+**Notes on data access:** 
 There are easier options than setting up your own server instance of the database.  
 1. Data access can be requested from [Data First](www.datafirst.uct.ac.za) at the University of Cape Town (UCT). On site access to the complete 5 minute data is available through their secure server room and does not require a MSSQL server installation.   
 2. Several datasets with aggregated views are available [online]() and can be accessed for academic purposes.  
@@ -26,7 +28,6 @@ delretrieve
 		|-- command_line.py
 		|-- retrieve_del.py	
 		|-- support.py
-	|-- __init__.py
 	|-- MANIFEST.in
 	|-- README.md
 	|-- setup.py
