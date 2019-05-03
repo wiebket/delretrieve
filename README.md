@@ -2,7 +2,7 @@
 
 ## About this package
 
-This package contains tools to retrieve primary data from the South African Domestic Electrical Load (DEL) database. It requires access to a MSSQL server installation of the General_LR4 database. 
+This package contains tools to retrieve primary data from the South African Domestic Electrical Load (DEL) database. It requires access to a MSSQL server installation of the original General_LR4 database produced during the NRS Load Research study. 
 
 **Note on data access:** 
 There are easier options than setting up your own server instance of the database.  
@@ -41,7 +41,7 @@ Ensure that python 3 is installed on your computer. A simple way of getting it i
 
 ## Data retrieval
 
-From the command line (or Anaconda Prompt on windows) run 
+From the command line (or Anaconda Prompt on windows) run: 
 
 1. `delretrieve_data -p` to retrieve 5min load profile timeseries data
 	You will be prompted to enter the start and end year (choose in the range of 1994 - 2014) for which you want to retrieve data
@@ -50,13 +50,15 @@ From the command line (or Anaconda Prompt on windows) run
 
 When you use the command line interface for the first time, you will be requested to confirm the path for storing retrieved data. The 5 minute load profile data is ~120GB. Ensure that you choose a location with sufficient storage space! The default location is`USER_HOME/del_data/observations/`. You can change the storage location by creating a new target directory and altering the path in `USER_HOME/del_data/usr/store_path.txt`, or by deleting the path and entering a new path when prompted by the command line.
 
-### Additional command-line options
+*Additional command-line options*
 
 `-c`: (optional) saves files as .csv files instead of .feather (see notes on file format below)  
 `-y`: (optional) start year for profile data retrieval  
 `-z`: (optional) end year for profile data retrieval  
 
-### File format
+### Output
 The default format for retrieving data is as a .feather file, which provides fast and efficient retrieval and uploads for data frames. Feather is compatible with both R and python. Feather files should be stored for working purposes only as the file format is not suitable for archiving. Feather files built under one version can be incompatible with those built under a new version, in which case you will need to reconstruct them from the raw MSSQL database. Learn more about [feather](https://github.com/wesm/feather).
 
-To save the data in csv format, pass `--csv` as option to your command line arguements.
+## Data Exploration
+getGroups, getProfiles, writeProfiles, writeTables, saveTables, saveAnswers, saveRawProfiles
+
