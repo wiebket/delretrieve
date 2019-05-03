@@ -11,7 +11,7 @@ There are easier options than setting up your own server instance of the databas
 1. Data access can be requested from [Data First](www.datafirst.uct.ac.za) at the University of Cape Town (UCT). On site access to the complete 5 minute data is available through their secure server room and does not require a MSSQL server installation.   
 2. Several datasets with aggregated views are available [online]() and can be accessed for academic purposes.  
 
-Other useful packages are:
+Other useful packages are:  
 [delprocess](https://github.com/wiebket/delprocess) for cleaning, wrangling, processing, aggregating and feature engineering of the DEL data.
 
 ### Package structure
