@@ -24,7 +24,7 @@ delretrieve
 			|-- store_path.txt
 		|-- __init__.py
 		|-- command_line.py
-		|-- retrieve_dlr.py	
+		|-- retrieve_del.py	
 		|-- support.py
 	|-- __init__.py
 	|-- MANIFEST.in
@@ -37,18 +37,18 @@ Ensure that python 3 is installed on your computer. A simple way of getting it i
 
 1. Clone this repository from github.
 2. Navigate to the root directory (`delretrieve`) and run `python setup.py install`. 
-3. Update the database connection information in `USER_HOME/dlr_data/usr/cnxnstr.txt`. The data retrieval process will ONLY work if you have installed the database on a MSSQL server instance and have access permissions to the data. 
+3. Update the database connection information in `USER_HOME/del_data/usr/cnxnstr.txt`. The data retrieval process will ONLY work if you have installed the database on a MSSQL server instance and have access permissions to the data. 
 
 ## Data retrieval
 
 From the command line (or Anaconda Prompt on windows) run 
 
-1. `dlrretrieve_data -p` to retrieve 5min load profile timeseries data
+1. `delretrieve_data -p` to retrieve 5min load profile timeseries data
 	You will be prompted to enter the start and end year (choose in the range of 1994 - 2014) for which you want to retrieve data
-2. `dlrretrieve_data -t` to retrieve all supplementary tables
-3. `dlrretrieve_data -s` to retrieve anonymised survey responses
+2. `delretrieve_data -t` to retrieve all supplementary tables
+3. `delretrieve_data -s` to retrieve anonymised survey responses
 
-When you use the command line interface for the first time, you will be requested to confirm the path for storing retrieved data. The 5 minute load profile data is ~120GB. Ensure that you choose a location with sufficient storage space! The default location is`USER_HOME/dlr_data/observations/`. You can change the storage location by creating a new target directory and altering the path in `USER_HOME/dlr_data/usr/store_path.txt`, or by deleting the path and entering a new path when prompted by the command line.
+When you use the command line interface for the first time, you will be requested to confirm the path for storing retrieved data. The 5 minute load profile data is ~120GB. Ensure that you choose a location with sufficient storage space! The default location is`USER_HOME/del_data/observations/`. You can change the storage location by creating a new target directory and altering the path in `USER_HOME/del_data/usr/store_path.txt`, or by deleting the path and entering a new path when prompted by the command line.
 
 ### Additional command-line options
 

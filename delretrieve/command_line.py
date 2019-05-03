@@ -3,13 +3,13 @@
 """
 @author: Wiebke Toussaint
 
-Comman line interface for dlrretrieve module.
+Command line interface for the delretrieve package.
 
 Updated: 22 March 2019
 """
 
 from optparse import OptionParser
-from .retrieve_dlr import saveTables, saveAnswers, saveRawProfiles
+from .retrieve_del import saveTables, saveAnswers, saveRawProfiles
 from .support import validYears
 
 def main():

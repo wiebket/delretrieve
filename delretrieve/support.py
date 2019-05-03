@@ -3,7 +3,7 @@
 """
 @author: Wiebke Toussaint
 
-Support functions for the dlrretrieve module,
+Support functions for the delretrieve module,
 
 Updated: 21 March 2019
 """
@@ -14,12 +14,12 @@ import datetime as dt
 
 #Data structure
 home_dir = Path.home()
-usr_dir = os.path.join(home_dir, 'dlr_data','usr')
+usr_dir = os.path.join(home_dir, 'del_data','usr')
 
 def getDataDir():
     """
     This function checks if a valid data directory has been specified in
-    USER_HOME/dlr_data/usr/store_path.txt.
+    USER_HOME/del_data/usr/store_path.txt.
     """
     
     filepath = []
@@ -47,7 +47,7 @@ def specifyDataDir():
     This function creates the directory structure for saving data.    
     """
     
-    temp_obs_dir = os.path.join(home_dir,'dlr_data', 'observations') #default directory for observational data
+    temp_obs_dir = os.path.join(home_dir,'del_data', 'observations') #default directory for observational data
     
     try:
         mydir = getDataDir()
@@ -72,7 +72,7 @@ def specifyDataDir():
         f.write(mydir)
         f.close()
         
-    print('You can change it in USER_HOME/dlr_data/usr/store_path.txt')
+    print('You can change it in USER_HOME/del_data/usr/store_path.txt')
     
     profiles_dir = os.path.join(mydir, 'profiles')
     table_dir = os.path.join(mydir, 'tables')
@@ -120,7 +120,7 @@ def writeLog(log_line, file_name):
     *input*
     -------
     log_line (dataframe)
-    file_name (str): directory appended to USER_HOME/dlr_data/usr/ in which 
+    file_name (str): directory appended to USER_HOME/del_data/usr/ in which 
     logs will be saved.
     """
     

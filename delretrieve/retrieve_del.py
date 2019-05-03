@@ -31,7 +31,7 @@ def getObs(tablename = None, querystring = 'SELECT * FROM tablename', chunksize 
     querystring (str): valid SQL SELECT statement
     chunksize (int): default 10000
     
-    Requires USER_HOME/dlr_data/usr/cnxnstr.txt with database connection parameters.
+    Requires USER_HOME/del_data/usr/cnxnstr.txt with database connection parameters.
     """
     
     if tablename == 'Profiletable':
@@ -45,7 +45,7 @@ def getObs(tablename = None, querystring = 'SELECT * FROM tablename', chunksize 
                 cnxnstr = f.read().replace('\n', '')
         except FileNotFoundError as err:
             print("Cannot find file with connection information at \
-                  USER_HOME/dlr_data/usr/cnxnstr.txt: {0}".format(err))
+                  USER_HOME/del_data/usr/cnxnstr.txt: {0}".format(err))
             raise
             
         try:
@@ -324,7 +324,7 @@ def saveTables():
     csv file and a feather object.
     
     The following directory structure is created:
-        data_path (defined in USER_HOME/dlr_data/usr/store_path.txt)
+        data_path (defined in USER_HOME/del_data/usr/store_path.txt)
         |---tables
             |---csv
                 |---[files].csv
@@ -359,11 +359,11 @@ def saveAnswers():
     is returned and saved as both a csv file and a feather object. 
     
     Specifications for questions to anonymise are contained in 
-    USER_HOME/dlr_data/usr/blobAnon.csv and
-    USER_HOME/dlr_data/usr/charAnon.csv.
+    USER_HOME/del_data/usr/blobAnon.csv and
+    USER_HOME/del_data/usr/charAnon.csv.
     
     The following directory structure is created:
-        data_path (defined in USER_HOME/dlr_data/usr/store_path.txt)
+        data_path (defined in USER_HOME/del_data/usr/store_path.txt)
         |---tables
             |---csv
                 |---[files].csv
@@ -399,7 +399,7 @@ def saveRawProfiles(yearstart, yearend, filetype='feather'):
         [A, V, kVA, Hz, kW] for group years 2009 - 2014
         
     The following directory structure is created:
-        data_path (defined in USER_HOME/dlr_data/usr/store_path.txt)
+        data_path (defined in USER_HOME/del_data/usr/store_path.txt)
         |---profiles
             |---raw
                 |---unit
@@ -423,7 +423,7 @@ def saveRawProfiles(yearstart, yearend, filetype='feather'):
                         print(e)
                         logline = ['G'+str(year), unit, month, e]
                         log_lines = pd.DataFrame([logline], columns = ['group_year', 'unit', 'month', 'error'])
-                        writeLog(log_lines,'log_dlrretrieve_profiles')
+                        writeLog(log_lines,'log_delretrieve_profiles')
     
         elif year >= 2009:
             for unit in ['A', 'V', 'kVA', 'Hz', 'kW']:
@@ -434,6 +434,6 @@ def saveRawProfiles(yearstart, yearend, filetype='feather'):
                         print(e)
                         logline = ['G'+str(year), unit, month, e]
                         log_lines = pd.DataFrame([logline], columns = ['group_year', 'unit', 'month', 'error'])
-                        writeLog(log_lines,'log_dlrretrieve_profiles')
+                        writeLog(log_lines,'log_delretrieve_profiles')
     
     return print('Save profiles complete.')
