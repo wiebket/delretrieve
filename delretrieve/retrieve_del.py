@@ -3,11 +3,10 @@
 """
 @author: Wiebke Toussaint
 
-Functions to fetch data from the Domestic Load Research General_LR4 MSSQL Server 
-database. Requires a database instance and connection file that specifies access 
-details.
+Functions to fetch data from the NRS Load Research General_LR4 MSSQL Server database. 
+Requires a database instance and connection file that specifies access details.
 
-Updated: 22 March 2019
+Updated: 4 May 2019
 """
 
 import pandas as pd
@@ -20,18 +19,19 @@ from .support import usr_dir, specifyDataDir, validYears, writeLog, InputError
 
 obs_dir, profiles_dir, table_dir, rawprofiles_dir = specifyDataDir()
 
-def getObs(tablename = None, querystring = 'SELECT * FROM tablename', chunksize = 10000):
-    """
-    This function fetches tables from a MSSQL server instance of the DLR database 
-    and returns it as a pandas dataframe. 
 
-    *input*
-    -------
-    tablename (str): valid table name in General_LR4 MSSQL database
-    querystring (str): valid SQL SELECT statement
-    chunksize (int): default 10000
+def getObs(tablename = None, querystring = 'SELECT * FROM tablename', chunksize = 10000):
+    """Retrieves tables from a MSSQL server instance of the General_LR4 database. 
+
+    Parameters:
+        tablename (str): Valid table name in General_LR4 MSSQL database.
+        querystring (str): Valid SQL SELECT statement.
+        chunksize (int): Defaults to 10000.
     
     Requires USER_HOME/del_data/usr/cnxnstr.txt with database connection parameters.
+    
+    Returns:
+        pandas dataframe: Tablename from General_LR4 MSSQL database.    
     """
     
     if tablename == 'Profiletable':
@@ -39,7 +39,7 @@ def getObs(tablename = None, querystring = 'SELECT * FROM tablename', chunksize 
                      Use the getProfiles() function.')
  
     else:
-        #create connection object:
+        # Create connection object
         try:
             with open(os.path.join(usr_dir, 'cnxnstr.txt'), 'r') as f: 
                 cnxnstr = f.read().replace('\n', '')
@@ -50,29 +50,29 @@ def getObs(tablename = None, querystring = 'SELECT * FROM tablename', chunksize 
             
         try:
             cnxn = pyodbc.connect(cnxnstr)  
-            #specify and execute query:
+            # Specify and execute query
             if querystring == 'SELECT * FROM tablename':
                 query = "SELECT * FROM [General_LR4].[dbo].%s" % (tablename)
             else:
                 query = querystring  
-            df = pd.read_sql(query, cnxn)   #read to dataframe   
+            df = pd.read_sql(query, cnxn)
             return df
         except Exception:
             raise
 
 
 def getGroups():
-    """
-    This function fetches the group table and performs massive data wrangling 
-    to reshape it into a more usable format.
-    """
+    """Fetches and wrangles the group table to reshape it into a more usable format.
     
+    Returns:
+        pandas dataframe: Wrangled 'groups' table.
+    """
     groups = getObs('Groups')
     groups['ParentID'].fillna(0, inplace=True)
     groups['ParentID'] = groups['ParentID'].astype('int64')
     groups['GroupName'] = groups['GroupName'].str.strip()
     
-    #Deconstruct groups table apart into levels
+    # Deconstruct groups table apart into levels
     #LEVEL 1 GROUPS: domestic/non-domestic
     groups_level_1 = groups[groups['ParentID']==0] 
     #LEVEL 2 GROUPS: Eskom LR, NRS LR, Namibia, Clinics, Shops, Schools
@@ -82,14 +82,14 @@ def getGroups():
     #LEVEL 4 GROUPS: Locations
     groups_level_4 = groups[groups['ParentID'].isin(groups_level_3['GroupID'])]
     
-    #Slim down the group levels to only include columns requried for merging
+    # Slim down the group levels to only include columns requried for merging
     g1 = groups.loc[groups['ParentID']==0,['GroupID','ParentID','GroupName']].reset_index(drop=True)
     g2 = groups.loc[groups['ParentID'].isin(groups_level_1['GroupID']), [
             'GroupID','ParentID','GroupName']].reset_index(drop=True)
     g3 = groups.loc[groups['ParentID'].isin(groups_level_2['GroupID']), [
             'GroupID','ParentID','GroupName']].reset_index(drop=True)
     
-    #reconstruct group levels as one pretty, multi-index table
+    # Reconstruct group levels as one pretty, multi-index table
     recon3 = pd.merge(groups_level_4, g3, left_on ='ParentID', 
                       right_on = 'GroupID' , how='left', suffixes = ['_4','_3'])
     recon2 = pd.merge(recon3, g2, left_on ='ParentID_3',
@@ -102,7 +102,7 @@ def getGroups():
                    'Dom_NonDom','Survey','Year','Location']
     prettyg.columns = prettynames
     
-    #create multi-index dataframe
+    # Create multi-index dataframe
     allgroups = prettyg.set_index(['GroupID_1','GroupID_2','GroupID_3']).sort_index()
     allgroups['LocName'] = allgroups['Location'].apply(lambda x:x.partition(' ')[2])
         
@@ -110,24 +110,22 @@ def getGroups():
 
 
 def getProfileID(group_year = None):
+    """Fetches all profile IDs by group_year.
+    
+    Parameters:
+        group_year (int): 1994 <= year <= 2014. Defaults to None (returns all).
+    
+    Returns:
+        pandas dataframe: ProfileIDs for groups in year group_year.
     """
-    This function fetches all profile IDs by group year.
-    
-    *input*
-    -------
-    group_year (int): range(1994, 2014) inclusive
-    
-    If group_year is None, then profile IDs for all years are retrieved.
-    """
-    
     links = getObs('LinkTable')
     allprofiles = links[(links.GroupID != 0) & (links.ProfileID != 0)]
     if group_year is None:
         return allprofiles
 
-    #match GroupIDs to getGroups to get the profile years:
+    # Match GroupIDs to getGroups to get the profile years:
     else:
-        validYears(group_year) #check if year is valid
+        validYears(group_year) 
         allgroups = getGroups()
         allgroups.Year = allgroups.Year.astype(int)
         groupids = allgroups.loc[allgroups.Year == group_year, 'GroupID'] 
@@ -137,23 +135,22 @@ def getProfileID(group_year = None):
 
 
 def getMetaProfiles(group_year, unit = None):
+    """Fetches profile meta data by group_year and unit. 
+    
+    Parameters:
+        group_year (int): 1994 <= year <= 2014  
+        unit (str): 'A', 'V', 'kVA', 'Hz', 'kW'. Defaults to None (uses all).
+    
+    Returns:
+        dict (pandas dataframe, list): Profile metadata, ProfileIDs for unit 
+            and groups in year group_year.
     """
-    This function fetches profile meta data by group year and unit. 
-    
-    *input*
-    -------
-    group_year (int): range(1994, 2014) inclusive
-    unit (str): None, 'A', 'V', 'kVA', 'Hz', 'kW'
-    
-    If unit is None, then meta data of profiles for all units is retrieved.
-    """
-    
-    #list of profiles for the year:
+    # List of profiles for the year:
     pids = pd.Series(map(str, getProfileID(group_year))) 
-    #get observation metadata from the profiles table:
+    # Get observation metadata from the profiles table:
     metaprofiles = (getObs('profiles')[['Active','ProfileId','RecorderID',
                     'Unit of measurement']])
-    #select subset of metaprofiles corresponding to query
+    # Select subset of metaprofiles corresponding to query
     metaprofiles = metaprofiles[metaprofiles.ProfileId.isin(pids)] 
     metaprofiles.rename(columns={'Unit of measurement':'UoM'}, inplace=True)
     metaprofiles.loc[:,['UoM', 'RecorderID']] = (
@@ -178,23 +175,24 @@ def getMetaProfiles(group_year, unit = None):
 
 
 def getProfiles(group_year, month, unit):
-    """
-    This function fetches the load profiles of one unit for one month for groups
-    in one year. The retrieval is done incrementally to manage the large dataset.
+    """Fetches the load profiles of one unit for one month for groups in one year. 
     
-    *input*
-    -------
-    group_year (int): range(1994, 2014) inclusive
-    month (int): rang(1, 12) inclusive
-    unit (str): 'A', 'V', 'kVA', 'Hz', 'kW'
-    """
+    The retrieval is done incrementally to manage the large dataset.
     
+    Parameters:
+        group_year (int): 1994 <= year <= 2014
+        month (int): 1 <= month <= 12
+        unit (str): 'A', 'V', 'kVA', 'Hz', 'kW'
+    
+    Returns:
+        pandas dataframe: electricity meter readings for profiles in month, unit, group_year.    
+    """
     print('G'+str(group_year), month, unit)
     
     # Get metadata
     mp, plist = getMetaProfiles(group_year, unit)
     
-    ## Get profiles from server
+    # Get profiles from server
     subquery = ', '.join(str(x) for x in plist)
     query = "SELECT pt.ProfileID \
      ,pt.Datefield \
@@ -204,20 +202,17 @@ def getProfiles(group_year, month, unit):
     WHERE pt.ProfileID IN (" + subquery + ") AND MONTH(Datefield) =" + str(month) + " \
     ORDER BY pt.Datefield, pt.ProfileID"
     profiles = getObs(querystring = query)
-    
-    #data output:    
+      
     df = pd.merge(profiles, mp, left_on='ProfileID', right_on='ProfileId')
     df.drop('ProfileId', axis=1, inplace=True)
-    #convert strings to category data type to reduce memory usage
+    # Convert strings to category data type to reduce memory usage
     df.loc[:,['ProfileID','Valid']] = df.loc[:,['ProfileID','Valid']].apply(pd.Categorical)
        
     return df
     
 
 def writeProfilePath(group_year, year, month, unit, filetype):
-    """
-    This function creates the directory hierarchy and file names for writing 
-    raw profiles. 
+    """Creates the directory hierarchy and file names for writing raw profiles. 
     
     Files are named as follows:
         observationYear-observationMonth_GgroupYear_unit.filetype
@@ -225,38 +220,50 @@ def writeProfilePath(group_year, year, month, unit, filetype):
         is current (A) data recorded in January 2008 for households in groups 
         for the year 2007 
                         
-    *input*
-    -------
-    group_year (int): range(1994, 2014) inclusive
-    month (int): rang(1, 12) inclusive
-    unit (str): 'A', 'V', 'kVA', 'Hz', 'kW'
-    filetype (str): 'csv', 'feather'
-    """
+    Parameters:
+        group_year (int): 1994 <= year <= 2014
+        month (int): 1 <= month <= 12
+        unit (str): 'A', 'V', 'kVA', 'Hz', 'kW'
+        filetype (str): 'csv', 'feather'
     
+    Returns:
+        os.path: path_name_for_profile_file.filetype.
+            
+    Directory structure:
+        data_path (defined in USER_HOME/del_data/usr/store_path.txt)
+        |---profiles
+            |---raw
+                |---unit
+                    |---year    
+    """
     dir_path = os.path.join(rawprofiles_dir, str(unit), str(year))
     try:
-        os.makedirs(dir_path , exist_ok=True) #create profile directory if it does not exist
+        # Create profile directory if it does not exist
+        os.makedirs(dir_path , exist_ok=True) 
     except Exception as e:
         return e
     
-    file_path = os.path.join(dir_path, str(year)+'-'+str(month)+'_G'+str(group_year)+'_'+str(unit)+'.'+filetype)
+    file_path = os.path.join(dir_path, str(year)+'-'+str(month)+
+                             '_G'+str(group_year)+'_'+str(unit)+
+                             '.'+filetype)
       
     return file_path
 
 
 def writeProfiles(group_year, month, unit, filetype):
-    """
-    This function retrieves profiles by group year, month and units and saves 
-    them to disk. The retrieval is done incrementally to manage the large dataset.
+    """Retrieves and saves profiles by group_year, month and units.
     
-    *input*
-    -------
-    group_year (int): range(1994, 2014) inclusive
-    month (int): rang(1, 12) inclusive
-    unit (str): 'A', 'V', 'kVA', 'Hz', 'kW'
-    filetype (str): 'csv', 'feather'
-    """
+    The retrieval is done incrementally to manage the large dataset.
     
+    Parameters:
+        group_year (int): 1994 <= year <= 2014
+        month (int): 1 <= month <= 12
+        unit (str): 'A', 'V', 'kVA', 'Hz', 'kW'
+        filetype (str): 'csv', 'feather'
+    
+    Returns:
+        File saved to disk.
+    """
     df = getProfiles(group_year, month, unit)
     try:
         yrs = df.Datefield.dt.year.unique()
@@ -282,24 +289,25 @@ def writeProfiles(group_year, month, unit, filetype):
 
 
 def writeTables(names, dataframes): 
+    """Saves a list of names with an associated list of dataframes as csv file. 
+    
+    getObs() and getGroups() functions can be used to construct the dataframes.
+    
+    Parameters:
+        names (list): Names of tables to write. List items must be of type str.
+        dataframes (list): Data to write. List items must be of type dataframe.
+    
+    Returns:
+    Directory structure:
+        data_path (defined in USER_HOME/del_data/usr/store_path.txt)
+        |---tables
+            |---[files].csv
     """
-    This function saves a list of names with an associated list of dataframes 
-    as csv and feather files. The getObs() and getGroups() functions can be 
-    used to construct the dataframes.
-    
-    *input*
-    -------
-    names (list): list items must be of type str
-    dataframes (list): list items must be of type dataframe
-    
-    """
-    #create data directories
-    
-    os.makedirs(os.path.join(table_dir, 'feather') , exist_ok=True)
-    os.makedirs(os.path.join(table_dir, 'csv') , exist_ok=True)
-
-    #get data        
+    # Create tables directory
+    os.makedirs(table_dir, exist_ok=True)
+    # Get data        
     datadict = dict(zip(names, dataframes))
+
     for k in datadict.keys():
         if datadict[k].size == datadict[k].count().sum():
             data = datadict[k]
@@ -307,9 +315,7 @@ def writeTables(names, dataframes):
             data = datadict[k].fillna(np.nan) #feather doesn't write None type
         
         try:
-            feather_path = os.path.join(table_dir, 'feather', k + '.feather')
-            feather.write_dataframe(data, feather_path)
-            csv_path = os.path.join(table_dir, 'csv', k + '.csv')
+            csv_path = os.path.join(table_dir, k + '.csv')
             data.to_csv(csv_path, index=False)
             print('successfully saved table '  + k)
         except Exception as e:
@@ -319,20 +325,12 @@ def writeTables(names, dataframes):
 
 
 def saveTables():
-    """
-    This function fetches tables from MSSQL server and saves them as both a
-    csv file and a feather object.
+    """Fetches tables from MSSQL server and saves them as csv files.
     
-    The following directory structure is created:
-        data_path (defined in USER_HOME/del_data/usr/store_path.txt)
-        |---tables
-            |---csv
-                |---[files].csv
-            |---feather
-                |---[files].feather
+    Returns:
+        Files saved to disk.
     """
-    
-    #Get important tables from DLR MSSQL Server
+    # Get important tables from DLR MSSQL Server
     groups = getGroups() 
     questions = getObs('Questions')
     questionaires = getObs('Questionaires')
@@ -345,18 +343,31 @@ def saveTables():
     profilesummary = getObs('ProfileSummaryTable')
     recorderinstall = getObs('RECORDER_INSTALL_TABLE')
     
-    tablenames = ['groups', 'questions', 'questionaires', 'qdtype', 'qredundancy', 'qconstraints', 'answers', 'links', 'profiles' ,'profilesummary','recorderinstall']
-    tabledata = [groups, questions, questionaires, qdtype, qredundancy, qconstraints, answers, links, profiles, profilesummary, recorderinstall]
-    
-    writeTables(tablenames, tabledata) #saves tables to disk
+    tablenames = ['groups', 'questions', 'questionaires', 'qdtype', 
+                  'qredundancy', 'qconstraints', 'answers', 'links', 
+                  'profiles' ,'profilesummary','recorderinstall']
+    tabledata = [groups, questions, questionaires, qdtype, qredundancy, 
+                 qconstraints, answers, links, profiles, profilesummary, 
+                 recorderinstall]
+    # Saves tables to disk
+    writeTables(tablenames, tabledata) 
     
     return print('Save database tables complete.\n')
  
-def saveAnswers():
-    """
-    This function fetches survey responses and anonymises them to remove all 
-    discriminating personal information of respondents. The anonymised dataset 
-    is returned and saved as both a csv file and a feather object. 
+    
+def saveAnswers(anon=True):
+    """Fetches survey responses.
+    
+    Parameters:
+        anon (bool): Defaults to True.
+    
+    Returns:
+        Files saved to disk.
+    
+    By default responses are anoynimsed and all discriminating personal information of respondents 
+    are removed. The personally-identifying information is strictly confidential. This data should 
+    only be used by qualified individuals. South African POPI regulations must be observed when 
+    storing, processing and using personally identifying information.
     
     Specifications for questions to anonymise are contained in 
     USER_HOME/del_data/usr/blobAnon.csv and
@@ -365,54 +376,53 @@ def saveAnswers():
     The following directory structure is created:
         data_path (defined in USER_HOME/del_data/usr/store_path.txt)
         |---tables
-            |---csv
-                |---[files].csv
-            |---feather
-                |---[files].feather
+            |---answerfiles].csv
     """
+    if anon is True:
+        anstables = {'Answers_blob':'blobAnon.csv', 'Answers_char':'charAnon.csv', 'Answers_Number':None}    
+        for k,v in anstables.items():
+            # Get all answers
+            a = getObs(k) 
+            if v is None:
+                pass
+            else:
+                qs = pd.read_csv(os.path.join(usr_dir, v))
+                qs = qs.loc[lambda qs: qs.anonymise == 1, :]
+                qanon = pd.merge(getObs('Answers'), qs, left_on='QuestionaireID', 
+                                 right_on='QuestionaireID')[['AnswerID','ColumnNo','anonymise']]
+                for i, rows in qanon.iterrows():
+                    a.set_value(a[a.AnswerID == rows.AnswerID].index[0], str(rows.ColumnNo),'a')
+            # Save anonymised answers to disk
+            writeTables([k.lower() + '_anonymised'],[a]) 
     
-    anstables = {'Answers_blob':'blobAnon.csv', 'Answers_char':'charAnon.csv', 'Answers_Number':None}    
-    for k,v in anstables.items():
-        a = getObs(k) #get all answers
-        if v is None:
-            pass
-        else:
-            qs = pd.read_csv(os.path.join(usr_dir, v))
-            qs = qs.loc[lambda qs: qs.anonymise == 1, :]
-            qanon = pd.merge(getObs('Answers'), qs, left_on='QuestionaireID', right_on='QuestionaireID')[['AnswerID','ColumnNo','anonymise']]
-            for i, rows in qanon.iterrows():
-                a.set_value(a[a.AnswerID == rows.AnswerID].index[0], str(rows.ColumnNo),'a')
+        return print('Save anonymised survey responses complete.\n')
+    
+    else:
+        anstables = ['Answers_blob','Answers_char','Answers_Number']
+        ansdata = [getObs(a) for a in anstables]
+        writeTables([a.lower() for a in anstables], ansdata)
         
-        writeTables([k.lower() + '_anonymised'],[a]) #saves answers to disk
-    
-    return print('Save anonymised survey responses complete.\n')
+        return print('Save survey responses complete.\n\
+                     This is personally-identifying, strictly confidential information. \n\
+                     You are required to observe South African POPI regulations when storing and using this data.\n')
     
 
 def saveRawProfiles(yearstart, yearend, filetype='feather'):
-    """
-    This function saves all profiles for all groups in an ordered directory 
-    structure by unit and year.
+    """Saves all profiles for all groups in an ordered directory structure.
     
     Data loggers were changed in 2009 and the following profile unit restrictions
     are considered for groups before and after the logger change:
         [A, V] for group years 1994 - 2008 
         [A, V, kVA, Hz, kW] for group years 2009 - 2014
         
-    The following directory structure is created:
-        data_path (defined in USER_HOME/del_data/usr/store_path.txt)
-        |---profiles
-            |---raw
-                |---unit
-                    |---year
-                        |---[files].csv/.feather
-        
-    *input*
-    -------
-    yearstart (int): range(1994, 2014) inclusive
-    yearend (int): range(1994, 2014) inclusive
-    filetype (str): 'csv', 'feather'
-    """
+    Parameters:
+        yearstart (int): 1994 <= year_start <= 2014
+        yearend (int): year_start <= year_end <= 2014
+        filetype (str): 'csv', 'feather'
     
+    Returns:
+        Files saved to disk.
+    """
     for year in range(yearstart, yearend + 1):
         if year < 2009:
             for unit in ['A','V']:

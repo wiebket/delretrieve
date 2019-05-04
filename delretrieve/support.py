@@ -3,9 +3,9 @@
 """
 @author: Wiebke Toussaint
 
-Support functions for the delretrieve module,
+Support functions for the delretrieve package.
 
-Updated: 21 March 2019
+Updated: 4 May 2019
 """
 
 import os
@@ -45,6 +45,13 @@ def getDataDir():
 def specifyDataDir():
     """  
     This function creates the directory structure for saving data.    
+
+    The following default locations are created:
+    |-- your_data_dir (default: USER_HOME/del_data)
+        |-- observations
+            |-- profiles
+            |-- tables
+            
     """
     
     temp_obs_dir = os.path.join(home_dir,'del_data', 'observations') #default directory for observational data
@@ -85,9 +92,10 @@ class InputError(ValueError):
     """
     Exception raised for errors in the input.
 
-    Attributes:
-        expression -- input expression in which the error occurred
-        message -- explanation of the error
+    *input*
+    -------
+    expression: input expression in which the error occurred
+    message (str): explanation of the error
     """
 
     def __init__(self, expression, message):
@@ -120,8 +128,7 @@ def writeLog(log_line, file_name):
     *input*
     -------
     log_line (dataframe)
-    file_name (str): directory appended to USER_HOME/del_data/usr/ in which 
-    logs will be saved.
+    file_name (str): directory appended to USER_HOME/del_data/usr/ in which logs will be saved.
     """
     
     #Create log_dir and file to log path

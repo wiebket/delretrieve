@@ -5,7 +5,7 @@
 
 Command line interface for the delretrieve package.
 
-Updated: 22 March 2019
+Updated: 4 May 2019
 """
 
 from optparse import OptionParser
@@ -36,7 +36,7 @@ def main():
         saveTables()
         
     if options.answers == True:
-        saveAnswers()
+        saveAnswers() #anonymises by default
     
     if options.csv == True:
         filetype = 'csv'
