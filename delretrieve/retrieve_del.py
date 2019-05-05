@@ -402,9 +402,7 @@ def saveAnswers(anon=True):
         ansdata = [getObs(a) for a in anstables]
         writeTables([a.lower() for a in anstables], ansdata)
         
-        return print('Save survey responses complete.\n\
-                     This is personally-identifying, strictly confidential information. \n\
-                     You are required to observe South African POPI regulations when storing and using this data.\n')
+        return print('Save survey responses complete.\nThis is personally-identifying, strictly confidential information. \nsYou are required to observe South African POPI regulations when storing and using this data.\n')
     
 
 def saveRawProfiles(yearstart, yearend, filetype='feather'):
