@@ -1,4 +1,4 @@
-<img src="/delprocess/data/images/DEL_logo.png" alt="DEL Logo" width="200" height="150" align="left"/>
+<img src="/delprocess/data/DEL_logo.png" alt="DEL Logo" width="200" height="150" align="left"/>
 
 
 # South African <br/> Domestic Electrical Load <br/> Data Retrieval
@@ -10,7 +10,7 @@ This package contains tools to retrieve primary data from the South African Dome
 **Notes on data access:** 
 There are easier options than setting up your own server instance of the database.  
 1. Data access can be requested from [Data First](www.datafirst.uct.ac.za) at the University of Cape Town (UCT). On site access to the complete 5 minute data is available through their secure server room and does not require a MSSQL server installation.   
-2. Several datasets with aggregated views are available [online]() and can be accessed for academic purposes.  
+2. Several datasets with aggregated views are available [online](https://www.datafirst.uct.ac.za/dataportal/index.php/catalog/DELS/about) and can be accessed for academic purposes.  
 
 Other useful packages are:  
 [delprocess](https://github.com/wiebket/delprocess) for cleaning, wrangling, processing, aggregating and feature engineering of the DEL data.
