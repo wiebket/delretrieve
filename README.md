@@ -1,4 +1,4 @@
-<img src="/delretrieve/data/DEL_logo.png" alt="DEL Logo" width="200" height="150" align="left"/>
+<img src="/delretrieve/data/images/DEL_logo.png" alt="DEL Logo" width="200" height="150" align="left"/>
 
 
 # South African <br/> Domestic Electrical Load Study <br/> Data Retrieval
@@ -65,4 +65,8 @@ The default format for retrieving data is as a .feather file, which provides fas
 
 ## Data Exploration
 getGroups, getProfiles, writeProfiles, writeTables, saveTables, saveAnswers, saveRawProfiles
+
+ Developed by          	|  Funded by
+:----------------------:|:-------------------------:
+<img src="/delretrieve/data/images/erc_logo.jpg" alt="ERC Logo" width="206" height="71" align="left" hspace="20" />   |  <img src="/delretrieve/data/images/sanedi_logo.jpg" alt="Sanedi Logo" width="177" height="98" align="left" hspace="20" />
 
