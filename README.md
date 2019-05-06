@@ -1,4 +1,4 @@
-<img src="/delprocess/data/DEL_logo.png" alt="DEL Logo" width="200" height="150" align="left"/>
+<img src="/delretrieve/data/DEL_logo.png" alt="DEL Logo" width="200" height="150" align="left"/>
 
 
 # South African <br/> Domestic Electrical Load <br/> Data Retrieval
