@@ -8,6 +8,7 @@
 This package contains tools to retrieve primary data from the South African Domestic Electrical Load (DEL) database. It requires access to a MSSQL server installation of the original General_LR4 database produced during the NRS Load Research study. 
 
 **Notes on data access:** 
+
 There are easier options than setting up your own server instance of the database.  
 1. Data access can be requested from [Data First](www.datafirst.uct.ac.za) at the University of Cape Town (UCT). On site access to the complete 5 minute data is available through their secure server room and does not require a MSSQL server installation.   
 2. Several datasets with aggregated views are available [online](https://www.datafirst.uct.ac.za/dataportal/index.php/catalog/DELS/about) and can be accessed for academic purposes.  
