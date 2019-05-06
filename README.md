@@ -66,6 +66,10 @@ The default format for retrieving data is as a .feather file, which provides fas
 ## Data Exploration
 getGroups, getProfiles, writeProfiles, writeTables, saveTables, saveAnswers, saveRawProfiles
 
+## Funding
+This code has been developed by the Energy Research Centre at the University of Cape Town with funding from the South African National Energy Development Initiative under the CESAR programme.
+
+
  Developed by          	|  Funded by
 :----------------------:|:-------------------------:
 <img src="/delretrieve/data/images/erc_logo.jpg" alt="ERC Logo" width="206" height="71" align="left" hspace="20" />   |  <img src="/delretrieve/data/images/sanedi_logo.jpg" alt="Sanedi Logo" width="177" height="98" align="left" hspace="20" />
