@@ -9,7 +9,7 @@ from setuptools import setup, find_packages
 import os
 from pathlib import Path
 
-usr_dir = os.path.join(Path.home(), 'del_data','usr')
+usr_dir = os.path.join(str(Path.home()), 'del_data','usr')
 os.makedirs(usr_dir, exist_ok=True)
 
 setup(
