@@ -13,7 +13,7 @@ from pathlib import Path
 import datetime as dt
 
 #Data structure
-home_dir = Path.home()
+home_dir = str(Path.home())
 usr_dir = os.path.join(home_dir, 'del_data','usr')
 
 def getDataDir():
