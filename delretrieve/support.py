@@ -5,7 +5,7 @@
 
 Support functions for the delretrieve package.
 
-Updated: 4 May 2019
+Updated: 22 May 2019
 """
 
 import os
@@ -115,10 +115,10 @@ def validYears(*args):
     """
     
     for year in args:
-        if year >= 1994 and year <= 2014:
+        if year >= 1994 and year <= 2015:
             pass
         else:
-            raise InputError([year], 'Year is out of range. Please select a year between 1994 and 2014')           
+            raise InputError([year], 'Year is out of range. Please select a year between 1994 and 2015')
     return
 
 def writeLog(log_line, file_name):    
