@@ -70,7 +70,7 @@ getGroups, getProfiles, writeProfiles, writeTables, saveTables, saveAnswers, sav
 ## Acknowledgements
 
 ### Citation
-Toussaint, Wiebke. delretrieve: Data Retrieval of the South African Domestic Electrical Load Study, version 1.01. Zenodo. https://zenodo.org/record/3605425 (2019).
+Toussaint, Wiebke. delretrieve: Data Retrieval of the South African Domestic Electrical Load Study, version 1.01. Zenodo. https://doi.org/10.5281/zenodo.3605425 (2019).
 
 ### Funding
 This code has been developed by the Energy Research Centre at the University of Cape Town with funding from the South African National Energy Development Initiative under the CESAR programme.
