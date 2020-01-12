@@ -1,3 +1,4 @@
+<a href="https://zenodo.org/badge/latestdoi/160184706"><img src="https://zenodo.org/badge/160184706.svg" alt="DOI"></a>  
 <img src="/delretrieve/data/images/DEL_logo.png" alt="DEL Logo" width="200" height="150" align="left"/>
 
 
