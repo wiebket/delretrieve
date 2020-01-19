@@ -38,7 +38,7 @@ delretrieve
 ```
 
 ## Setup instructions
-Ensure that python 3 is installed on your computer. A simple way of getting it is to install it with [Anaconda](https://conda.io/docs/user-guide/install/index.html). Once python has been installed, the delretrieve package can be installed.
+Ensure that python 3 is installed on your computer. A simple way of getting it is to install it with [Anaconda](https://docs.anaconda.com/anaconda/install/). Once python has been installed, the delretrieve package can be installed.
 
 1. Clone this repository from github.
 2. Navigate to the root directory (`delretrieve`) and run `python setup.py install`. 
